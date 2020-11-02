@@ -22,6 +22,7 @@ done < <(docker image inspect -f '{{json .Config.ExposedPorts}}' $imageId|jq -r 
 HOST_MNT=${HOST_MNT:-$BWD/mnt}
 GUEST_MNT=${GUEST_MNT:-$BWD/mnt}
 
+DOCKER_RUN_ARGS+=( -v $GUEST_MNT/etc/letsencrypt/live:/etc/letsencrypt/live )
 DOCKER_RUN_ARGS+=( -v $GUEST_MNT/etc/bind/zones:/var/bind/zones )
 
 DOCKER_RUN_ARGS+=( -e EMAIL=$EMAIL )

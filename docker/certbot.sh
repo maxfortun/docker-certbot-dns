@@ -10,7 +10,7 @@ domains=$(ls -1 /var/bind/zones|grep -v '[0-9]$'|tr '\n' ','|sed 's/,$//g')
 
 certbot certonly -n --manual --text --agree-tos --manual-public-ip-logging-ok --preferred-challenges dns \
 	--manual-auth-hook $WD/certbot-auth.sh \
-	--manual-cleanup-hook $WD/certbot-auth.sh \
+	--manual-cleanup-hook $WD/certbot-cleanup.sh \
 	--email $EMAIL \
 	--test-cert \
 	-d $domains
