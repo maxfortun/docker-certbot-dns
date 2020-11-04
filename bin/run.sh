@@ -7,7 +7,7 @@ BWD=$(dirname "$SWD")
 . $SWD/setenv.sh
 
 if [ -z "$EMAIL" ]; then
-	echo "MAIL environment variable is required for certificate requests."
+	echo "EMAIL environment variable is required for certificate requests."
 	exit 1
 fi
 
