@@ -1,2 +1,2 @@
-#!/bin/ash -ex
+#!/bin/ash -e
 env

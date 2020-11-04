@@ -1,10 +1,15 @@
-#!/bin/bash -ex
+#!/bin/bash -e
 
 pushd "$(dirname $0)"
 SWD=$(pwd)
 BWD=$(dirname "$SWD")
 
 . $SWD/setenv.sh
+
+if [ -z "$EMAIL" ]; then
+	echo "MAIL environment variable is required for certificate requests."
+	exit 1
+fi
 
 RUN_IMAGE="$REPO/$NAME"
 
@@ -22,7 +27,7 @@ done < <(docker image inspect -f '{{json .Config.ExposedPorts}}' $imageId|jq -r 
 HOST_MNT=${HOST_MNT:-$BWD/mnt}
 GUEST_MNT=${GUEST_MNT:-$BWD/mnt}
 
-DOCKER_RUN_ARGS+=( -v $GUEST_MNT/etc/letsencrypt/live:/etc/letsencrypt/live )
+DOCKER_RUN_ARGS+=( -v $GUEST_MNT/etc/letsencrypt:/etc/letsencrypt )
 DOCKER_RUN_ARGS+=( -v $GUEST_MNT/etc/bind/zones:/var/bind/zones )
 
 DOCKER_RUN_ARGS+=( -e EMAIL=$EMAIL )

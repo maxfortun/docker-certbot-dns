@@ -1,4 +1,4 @@
-#!/bin/ash -ex
+#!/bin/ash -e
 
 cd $(dirname $0)
 WD=$(pwd)
@@ -12,7 +12,7 @@ certbot certonly -n --manual --text --agree-tos --manual-public-ip-logging-ok --
 	--manual-auth-hook $WD/certbot-auth.sh \
 	--manual-cleanup-hook $WD/certbot-cleanup.sh \
 	--email $EMAIL \
-	--test-cert \
-	-d $domains
+	-d $domains \
+	"$@"
 
 

@@ -1,4 +1,4 @@
-#!/bin/ash -ex
+#!/bin/ash -e
 echo "Validating $CERTBOT_DOMAIN"       
 
 logFile=$(basename $0)
