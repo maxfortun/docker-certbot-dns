@@ -17,12 +17,12 @@ DOCKER_RUN_ARGS=( -e container=docker )
 DOCKER_RUN_ARGS+=( -v /etc/resolv.conf:/etc/resolv.conf:ro )
 
 # Publish exposed ports
-imageId=$(docker images --format="{{.Repository}} {{.ID}}"|grep "^$RUN_IMAGE "|awk '{ print $2 }')
-while read port; do
-	hostPort=$DOCKER_PORT_PREFIX${port%%/*}
-	[ ${#hostPort} -gt 5 ] && hostPort=${hostPort:${#hostPort}-5}
-	DOCKER_RUN_ARGS+=( -p $hostPort:$port )
-done < <(docker image inspect -f '{{json .Config.ExposedPorts}}' $imageId|jq -r 'keys[]')
+#imageId=$(docker images --format="{{.Repository}} {{.ID}}"|grep "^$RUN_IMAGE "|awk '{ print $2 }')
+#while read port; do
+#	hostPort=$DOCKER_PORT_PREFIX${port%%/*}
+#	[ ${#hostPort} -gt 5 ] && hostPort=${hostPort:${#hostPort}-5}
+#	DOCKER_RUN_ARGS+=( -p $hostPort:$port )
+#done < <(docker image inspect -f '{{json .Config.ExposedPorts}}' $imageId|jq -r 'keys[]')
 
 HOST_MNT=${HOST_MNT:-$BWD/mnt}
 GUEST_MNT=${GUEST_MNT:-$BWD/mnt}
