@@ -1,5 +1,5 @@
 #!/bin/ash -e
-echo "Validating $CERTBOT_DOMAIN"       
+echo "$CERTBOT_DOMAIN: Validating"
 
 logFile=$(basename $0)
 exec 1> $logFile.$CERTBOT_DOMAIN.out
@@ -13,17 +13,17 @@ serial=$(grep '; serial' $zoneFile|awk '{ print $1 }')
 nextSerial=$(( serial + 1 ))
 sed -i.$serial "s/[0-9]* ; serial/$nextSerial ; serial/" $zoneFile
 
-NS=$(nslookup -q=ns $domain|grep "internet address"|awk '{ print $5 }'|head -1)
+NS=$(nslookup -q=ns $domain|grep "nameserver"|awk '{ print $4 }'|head -1)
 
-echo "Waiting for $CERTBOT_VALIDATION"
+echo "$CERTBOT_DOMAIN@$NS: Waiting for $CERTBOT_VALIDATION"
 while true; do
 	records=$(nslookup -q=txt _acme-challenge.$domain $NS)
-	if echo "$records" | grep $CERTBOT_VALIDATION; then
+	if echo "$records" | grep -- $CERTBOT_VALIDATION; then
 		break
 	fi
-	echo "Still waiting for $CERTBOT_VALIDATION"
+	echo "$CERTBOT_DOMAIN@$NS: Still waiting for $CERTBOT_VALIDATION"
 	sleep 5
 done
-echo "Found $CERTBOT_VALIDATION"
+echo "$CERTBOT_DOMAIN@$NS: Found $CERTBOT_VALIDATION"
 
 
