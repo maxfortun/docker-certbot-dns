@@ -10,14 +10,14 @@ zoneFile=/var/bind/zones/$domain
 
 echo "_acme-challenge		TXT	$CERTBOT_VALIDATION" >> $zoneFile
 serial=$(grep '; serial' $zoneFile|awk '{ print $1 }')
-nextSerial=$(( serial + 1 ))
+nextSerial=$( date +%Y%m%d%S )
 sed -i.$serial "s/[0-9]* ; serial/$nextSerial ; serial/" $zoneFile
 
 NS=$(nslookup -q=ns $domain|grep "nameserver"|awk '{ print $4 }'|head -1)
 
 echo "$CERTBOT_DOMAIN@$NS: Waiting for $CERTBOT_VALIDATION"
 while true; do
-	records=$(nslookup -q=txt _acme-challenge.$domain $NS)
+	records=$(nslookup -q=txt _acme-challenge.$domain $NS || true)
 	if echo "$records" | grep -- $CERTBOT_VALIDATION; then
 		break
 	fi
